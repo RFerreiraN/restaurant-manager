@@ -1,20 +1,23 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold mb-6">
-    🍽 Cocina en tiempo real
-  </h1>
+<div class="min-h-screen w-full bg-amber-700 text-white">
+  <h1 class="text-2xl font-bold">🍽 Cocina en tiempo real</h1>
 
-  <div *ngFor="let order of orders" class="bg-white shadow-md rounded-xl p-4 mb-4 border-l-4 border-green-500">
+  <div *ngFor="let order of orders" class="bg-white text-black shadow-md rounded-xl p-4 m-4 border-l-4 border-zinc-300">
 
     <p class="font-bold">
       Orden: {{ order._id }}
     </p>
 
-    <p>Total: {{ order.total }}€</p>
     <p>Estado: {{ order.status }}</p>
+    <p>Comandas: </p>
+    <p>Mesa: {{ order.table }}</p>
 
     <div class="mt-2 text-sm text-gray-600">
       🧾 Observaciones: {{ order.observations }}
     </div>
+  </div>
+
+  <div class="p-6">
+
 
   </div>
 </div>
