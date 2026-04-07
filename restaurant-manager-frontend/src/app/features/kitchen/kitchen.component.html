@@ -3,21 +3,19 @@
 
   <div *ngFor="let order of orders" class="bg-white text-black shadow-md rounded-xl p-4 m-4 border-l-4 border-zinc-300">
 
+
     <p class="font-bold">
       Orden: {{ order._id }}
     </p>
 
-    <p>Estado: {{ order.status }}</p>
-    <p>Comandas: </p>
-    <p>Mesa: {{ order.table }}</p>
+    <p>Mesa: {{ order.table.number }}</p>
 
+    <p>Estado: {{ order.status }}</p>
+    <div *ngFor="let item of order.items">
+      <p>Comandas: {{ item.product.nombre }} * {{ item.quantity }} unds</p>
+    </div>
     <div class="mt-2 text-sm text-gray-600">
       🧾 Observaciones: {{ order.observations }}
     </div>
-  </div>
-
-  <div class="p-6">
-
-
   </div>
 </div>

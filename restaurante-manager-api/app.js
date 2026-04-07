@@ -80,7 +80,6 @@ app.use(cookieParser())
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.send('Holis')
 })
 
 app.use('/auth', authRoutes)

@@ -11,10 +11,18 @@ import { SOCKET_EVENTS } from 'src/app/core/constants/socket.event';
 export class KitchenComponent implements OnInit {
   orders: Order[] = []
 
+  async loadOrders() {
+    const res = await fetch('http://localhost:3000/orders')
+    this.orders = await res.json()
+    console.log(this.orders)
+  }
+
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
     this.socketService.connect('test-token')
+
+    this.loadOrders()
 
     this.socketService.on<Order>(SOCKET_EVENTS.ORDER_NEW, (order) => {
       console.log('Pedido recibido:', order)

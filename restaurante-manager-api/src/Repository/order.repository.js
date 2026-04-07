@@ -11,6 +11,7 @@ export class OrderRepository {
     return Order.find()
       .populate('table', 'number')
       .populate('user', 'nombre')
+      .populate('items.product')
   }
 
   static async getOrderById(id) {
