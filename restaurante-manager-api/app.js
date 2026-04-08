@@ -15,6 +15,7 @@ import usersRoutes from './src/Routes/user.routes.js'
 import jwt from 'jsonwebtoken'
 import { UserRepository } from './src/Repository/user.repository.js'
 import { setSocketInstance } from './src/Sockets/socket.js'
+import { OrderRepository } from './src/Repository/order.repository.js'
 
 configDotenv()
 
@@ -68,6 +69,17 @@ io.on('connection', (socket) => {
 
   socket.join(role)
   console.log(`Socket ${socket.id} united to room ${role}`)
+
+  socket.on('order:update', async (updateOrder) => {
+    if (!updateOrder) {
+      throw new Error('Orden no existe')
+    }
+    const { orderId, status } = updateOrder
+
+    const order = await OrderRepository.updateStatus(orderId, status)
+
+    io.emit('order:updated', { id: order._id, status: order.status })
+  })
 
   socket.on('disconnect', () => {
     console.log(`User: ${nombre} is disconnect or logout`)

@@ -17,6 +17,13 @@ export class KitchenComponent implements OnInit {
     console.log(this.orders)
   }
 
+  changeStatus(orderId: string, status: string) {
+    this.socketService.emit(SOCKET_EVENTS.ORDER_UPDATE, {
+      orderId,
+      status
+    })
+  }
+
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {

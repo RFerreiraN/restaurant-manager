@@ -136,22 +136,45 @@ export class OrderService {
     return ordersByUser
   }
 
+  // static async updateOrder(id, data) {
+  //   const { items } = data
+  //   let totalCalculate = 0
+  //   for (const item of items) {
+  //     const product = await ProductRepository.getProductById(item.product)
+  //     if (!product) {
+  //       throw new Error('Product not found')
+  //     }
+
+  //     if (product.available === false) {
+  //       throw new Error(`Product ${product.nombre} is currently not available`)
+  //     }
+
+  //     totalCalculate += product.price * item.quantity
+  //   }
+  //   data.total = totalCalculate
+  //   return await OrderRepository.updateOrder(id, data)
+  // }
+
   static async updateOrder(id, data) {
-    const { items } = data
-    let totalCalculate = 0
-    for (const item of items) {
-      const product = await ProductRepository.getProductById(item.product)
-      if (!product) {
-        throw new Error('Product not found')
+    if (Array.isArray(data.items)) {
+      let totalCalculate = 0
+
+      for (const item of data.items) {
+        const product = await ProductRepository.getProductById(item.product)
+
+        if (!product) {
+          throw new Error('Product not found')
+        }
+
+        if (!product.available) {
+          throw new Error(`Product ${product.nombre} is currently not available`)
+        }
+
+        totalCalculate += product.price * item.quantity
       }
 
-      if (product.available === false) {
-        throw new Error(`Product ${product.nombre} is currently not available`)
-      }
-
-      totalCalculate += product.price * item.quantity
+      data.total = totalCalculate
     }
-    data.total = totalCalculate
     return await OrderRepository.updateOrder(id, data)
   }
 }

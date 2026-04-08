@@ -5,7 +5,7 @@ export class ProductController {
   static async createProduct(req, res) {
     const results = validateProduct(req.body)
     if (results.error) {
-      return res.status(400).json({ error: results.error.message })
+      return res.status(400).json({ error: JSON.parse(results.error.message) })
     }
 
     try {
