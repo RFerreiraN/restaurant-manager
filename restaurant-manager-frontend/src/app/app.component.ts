@@ -11,9 +11,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.socketService.connect('test-token')
-
-    this.socketService.on('order:new', (data) => {
-      console.log(' Nueva Orden:', data)
-    })
   }
 }

@@ -1,6 +1,5 @@
 import { OrderRepository } from '../Repository/order.repository.js'
 import { ProductRepository } from '../Repository/product.repository.js'
-import { getSocketInstance } from '../Sockets/socket.js'
 
 export class OrderService {
   static async createOrder(data) {
@@ -21,12 +20,6 @@ export class OrderService {
     }
     data.total = totalCalculate
     const newOrder = await OrderRepository.createOrder(data)
-
-    const io = getSocketInstance()
-
-    console.log('Send to kitchen:', newOrder)
-    io.to('kitchen').to('admin').emit('order:new', newOrder)
-
     return newOrder
   }
 
@@ -88,31 +81,17 @@ export class OrderService {
       throw new Error('Cant modify Order')
     }
 
+    const previousStatus = order.status
+
     this.validateStatusTransition(order.status, status, role)
 
     const orderStatus = await OrderRepository.updateStatus(id, status)
 
-    if (status === 'preparing') {
-      io.to('waiter').to('admin').emit('order:preparing', orderStatus)
+    return {
+      order: orderStatus,
+      previousStatus,
+      newStatus: status
     }
-
-    if (status === 'ready') {
-      io.to('waiter').to('admin').emit('order:ready', orderStatus)
-    }
-
-    if (status === 'delivered') {
-      io.to('admin').emit('order:delivered', orderStatus)
-    }
-
-    if (status === 'paid') {
-      io.emit('table:update', { tableId: orderStatus.table, status: 'free' })
-    }
-
-    if (status === 'cancelled') {
-      io.emit('order:cancelled', orderStatus)
-    }
-
-    return orderStatus
   }
 
   static async getOrdersByTable(tableId) {

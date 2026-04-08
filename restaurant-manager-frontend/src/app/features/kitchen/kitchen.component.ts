@@ -18,7 +18,7 @@ export class KitchenComponent implements OnInit {
   }
 
   changeStatus(orderId: string, status: string) {
-    this.socketService.emit(SOCKET_EVENTS.ORDER_UPDATE, {
+    this.socketService.emit(SOCKET_EVENTS.ORDER_STATUS_CHANGED, {
       orderId,
       status
     })
@@ -27,13 +27,12 @@ export class KitchenComponent implements OnInit {
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
-    this.socketService.connect('test-token')
-
     this.loadOrders()
 
     this.socketService.on<Order>(SOCKET_EVENTS.ORDER_NEW, (order) => {
       console.log('Pedido recibido:', order)
       this.orders.unshift(order)
     })
+
   }
 }

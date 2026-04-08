@@ -63,14 +63,14 @@ io.use(async (socket, next) => {
   }
 })
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   const { nombre, role } = socket.user
   console.log(`User connected: ${nombre} with role: ${role}`)
 
   socket.join(role)
   console.log(`Socket ${socket.id} united to room ${role}`)
 
-  socket.on('order:update', async (updateOrder) => {
+  socket.on('order:changeStatus', async (updateOrder) => {
     if (!updateOrder) {
       throw new Error('Orden no existe')
     }
@@ -78,7 +78,10 @@ io.on('connection', (socket) => {
 
     const order = await OrderRepository.updateStatus(orderId, status)
 
-    io.emit('order:updated', { id: order._id, status: order.status })
+    io.to('kitchen').emit('order:status:changed', {
+      id: order._id,
+      status: order.status
+    })
   })
 
   socket.on('disconnect', () => {

@@ -31,6 +31,10 @@ export class SocketService {
     this.socket.on(event, callback)
   }
 
+  off<T>(event: string, callback: (data: T) => void) {
+    this.socket.off(event, callback)
+  }
+
   emit(event: string, data: any) {
     this.socket.emit(event, data)
   }
