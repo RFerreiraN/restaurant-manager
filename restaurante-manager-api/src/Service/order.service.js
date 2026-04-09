@@ -156,4 +156,27 @@ export class OrderService {
     }
     return await OrderRepository.updateOrder(id, data)
   }
+
+  static async removeItemOrder(orderId, itemId) {
+    const order = await OrderRepository.getOrderById(orderId)
+    if (!order) {
+      throw new Error('Order is not exist')
+    }
+
+    if (order.status === 'paid' || order.status === 'cancelled') {
+      throw new Error('Order is are cancelled or paid')
+    }
+    const orderItemRemoved = await OrderRepository.removeItemOrder(order.id, itemId)
+
+    const totalCalculate = orderItemRemoved.items.reduce((acc, item) => {
+      return acc + item.product.price * item.quantity
+    }, 0)
+
+    const updateOrder = await OrderRepository.updateOrder(orderId, {
+      total: totalCalculate
+    })
+    return {
+      updateOrder
+    }
+  }
 }

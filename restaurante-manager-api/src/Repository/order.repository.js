@@ -55,4 +55,16 @@ export class OrderRepository {
   static async getActiveOrdersByTable(tableId) {
     return Order.find({ table: tableId, status: { $nin: ['paid', 'cancelled'] } })
   }
+
+  static async removeItemOrder(orderId, itemID) {
+    return Order.findByIdAndUpdate(
+      orderId,
+      {
+        $pull: { items: { _id: itemID } }
+      },
+      { new: true }
+    )
+      .populate('table', 'number')
+      .populate('items.product', 'nombre price')
+  }
 }

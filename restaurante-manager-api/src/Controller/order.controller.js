@@ -1,6 +1,7 @@
 import { OrderService } from '../Service/order.service.js'
 import { validateOrder, validateStatusSchema, validateWithOutStatus } from '../utils/Validations/order.validator.js'
 import { getSocketInstance } from '../Sockets/socket.js'
+import { ORDER_EVENTS } from '../utils/order.events.js'
 
 export class OrderController {
   static async createOrder(req, res) {
@@ -55,30 +56,22 @@ export class OrderController {
     try {
       const orderStatus = await OrderService.updateStatus(id, status, role)
       const io = getSocketInstance()
-      const { newStatus, order } = orderStatus
+      const { newStatus } = orderStatus
 
-      if (newStatus === 'preparing') {
-        io.to('waiter').to('admin').emit('order:preparing', orderStatus)
+      const config = ORDER_EVENTS?.[newStatus]
+
+      if (!config) return
+
+      const { event, rooms } = config
+
+      if (!rooms || rooms.length === 0) {
+        io.emit(event, orderStatus)
+        return
       }
 
-      if (newStatus === 'ready') {
-        io.to('waiter').to('admin').emit('order:ready', orderStatus)
-      }
-
-      if (newStatus === 'delivered') {
-        io.to('admin').emit('order:delivered', orderStatus)
-      }
-
-      if (newStatus === 'paid') {
-        io.emit('table:update', {
-          tableId: order.table,
-          status: 'free'
-        })
-      }
-
-      if (newStatus === 'cancelled') {
-        io.emit('order:cancelled', orderStatus)
-      }
+      rooms.forEach(room => {
+        io.to(room).emit(event, orderStatus)
+      })
 
       return res.status(200).json(orderStatus)
     } catch (error) {
@@ -125,6 +118,17 @@ export class OrderController {
     try {
       const modifyOrder = await OrderService.updateOrder(id, results.data)
       return res.status(200).json(modifyOrder)
+    } catch (error) {
+      return res.status(400).json({ message: error.message })
+    }
+  }
+
+  static async removeItemOrder(req, res) {
+    const { orderId, itemId } = req.params
+
+    try {
+      const order = await OrderService.removeItemOrder(orderId, itemId)
+      return res.status(200).json({ message: 'Item removed successfully', order })
     } catch (error) {
       return res.status(400).json({ message: error.message })
     }

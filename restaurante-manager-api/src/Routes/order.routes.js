@@ -14,5 +14,6 @@ router.get('/table/:tableId/active', authMiddleware, roleMiddleware(['waiter', '
 router.get('/:id', authMiddleware, OrderController.getOrderById)
 router.patch('/:id/status', authMiddleware, OrderController.updateStatus)
 router.patch('/:id', authMiddleware, OrderController.updateOrder)
+router.patch('/:orderId/items/:itemId', authMiddleware, OrderController.updateOrder)
 
 export default router
