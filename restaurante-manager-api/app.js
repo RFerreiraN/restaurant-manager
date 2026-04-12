@@ -15,8 +15,8 @@ import usersRoutes from './src/Routes/user.routes.js'
 import jwt from 'jsonwebtoken'
 import { UserRepository } from './src/Repository/user.repository.js'
 import { setSocketInstance } from './src/Sockets/socket.js'
-import { OrderRepository } from './src/Repository/order.repository.js'
-
+import { OrderService } from './src/Service/order.service.js'
+import { ORDER_EVENTS } from './src/utils/order.events.js'
 configDotenv()
 
 const PORT = process.env.PORT ?? 3000
@@ -71,17 +71,27 @@ io.on('connection', async (socket) => {
   console.log(`Socket ${socket.id} united to room ${role}`)
 
   socket.on('order:changeStatus', async (updateOrder) => {
-    if (!updateOrder) {
-      throw new Error('Orden no existe')
-    }
+    if (!updateOrder) return
+
     const { orderId, status } = updateOrder
 
-    const order = await OrderRepository.updateStatus(orderId, status)
+    const result = await OrderService.updateStatus(orderId, status, 'kitchen')
 
-    io.to('kitchen').emit('order:status:changed', {
-      id: order._id,
-      status: order.status
-    })
+    const { order, newStatus } = result
+
+    const config = ORDER_EVENTS[newStatus]
+
+    if (config) {
+      const { event, rooms } = config
+
+      if (rooms.includes('all')) {
+        io.emit(event, order)
+      } else {
+        rooms.forEach(room => {
+          io.to(room).emit(event, order)
+        })
+      }
+    }
   })
 
   socket.on('disconnect', () => {
