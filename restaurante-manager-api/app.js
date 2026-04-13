@@ -38,7 +38,7 @@ io.use(async (socket, next) => {
   if (process.env.NODE_ENV !== 'production') {
     socket.user = {
       id: 'test',
-      role: 'admin',
+      role: socket.handshake.auth.token,
       nombre: 'TestUser'
     }
     return next()

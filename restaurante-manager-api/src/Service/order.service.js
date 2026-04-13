@@ -57,17 +57,21 @@ export class OrderService {
     const allowedTransitions = this.TRANSITIONS[currentStatus]
 
     if (!allowedTransitions) {
-      throw new Error('Unknown Status:', currentStatus)
+      throw new Error(`Unknown Status: ${currentStatus}`)
     }
 
     const allowedRoles = allowedTransitions[nextStatus]
 
     if (!allowedRoles) {
-      throw new Error('Allowed Transition')
+      throw new Error(`Invalid transition from ${currentStatus} to ${nextStatus}`)
     }
 
     if (!allowedRoles.includes(role)) {
-      throw new Error('Unauthorized rol for transition')
+      throw new Error('Unauthorized rol for this transition')
+    }
+
+    if (currentStatus === nextStatus) {
+      throw new Error('Order is already in this status')
     }
   }
 
