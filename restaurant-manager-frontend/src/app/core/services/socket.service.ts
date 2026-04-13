@@ -28,6 +28,7 @@ export class SocketService {
   }
 
   on<T>(event: string, callback: (data: T) => void) {
+    if (!this.socket) return
     this.socket.on(event, callback)
   }
 

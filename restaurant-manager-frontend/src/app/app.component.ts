@@ -10,22 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 export class AppComponent implements OnInit {
   constructor(private socketService: SocketService, private route: ActivatedRoute) { }
 
-  role?: string | null
-
 
   ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-      this.role = params.get('role')
-
-      if (!this.role) {
-        console.error('Role not found in url')
-        return
-      }
-
-
-      console.log('role of url: ', this.role)
-
-      this.socketService.connect(this.role)
-    })
+    this.socketService.connect('kitchen')
   }
 }

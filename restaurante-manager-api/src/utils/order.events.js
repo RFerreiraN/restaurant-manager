@@ -1,22 +1,22 @@
 export const ORDER_EVENTS = {
   preparing: {
-    event: 'order:preparing',
+    event: 'order:status:changed',
     rooms: ['waiter', 'admin']
   },
   ready: {
-    event: 'order:ready',
+    event: 'order:status:changed',
     rooms: ['waiter', 'admin']
   },
   delivered: {
-    event: 'order:delivered',
+    event: 'order:status:changed',
     rooms: ['admin']
   },
   paid: {
-    event: 'table:update',
+    event: 'order:status:changed',
     rooms: ['all']
   },
   cancelled: {
-    event: 'order:cancelled',
+    event: 'order:status:changed',
     rooms: ['all']
   }
 }

@@ -24,15 +24,29 @@ export class KitchenComponent implements OnInit {
     })
   }
 
-  constructor(private socketService: SocketService) { }
+  private listenersInitialized = false
 
-  ngOnInit(): void {
-    this.loadOrders()
-
+  private initSocketListeners() {
     this.socketService.on<Order>(SOCKET_EVENTS.ORDER_NEW, (order) => {
       console.log('Pedido recibido:', order)
       this.orders.unshift(order)
     })
 
+    this.socketService.on<Order>(SOCKET_EVENTS.ORDER_STATUS_CHANGED, (updatedOrder: Order) => {
+      this.orders = this.orders.map(order => order._id === updatedOrder._id ? updatedOrder : order)
+    })
+  }
+
+  constructor(private socketService: SocketService) { }
+
+  ngOnInit(): void {
+    this.loadOrders()
+
+    this.socketService.connected$.subscribe(connected => {
+      if (!connected || this.listenersInitialized) return
+
+      this.initSocketListeners()
+      this.listenersInitialized = true
+    })
   }
 }
