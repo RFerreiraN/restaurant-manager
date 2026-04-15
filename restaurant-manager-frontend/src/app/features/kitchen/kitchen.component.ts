@@ -18,13 +18,14 @@ export class KitchenComponent implements OnInit {
   }
 
   changeStatus(orderId: string, status: string) {
-    this.socketService.emit(SOCKET_EVENTS.ORDER_STATUS_CHANGED, {
+    console.log('Prueba', orderId, status)
+    console.log(this.socketService)
+    console.log('socket connected?', this.socketService['socket']?.connected)
+    this.socketService.emit('order:changeStatus', {
       orderId,
       status
     })
   }
-
-  private listenersInitialized = false
 
   private initSocketListeners() {
     this.socketService.on<Order>(SOCKET_EVENTS.ORDER_NEW, (order) => {
@@ -34,6 +35,7 @@ export class KitchenComponent implements OnInit {
 
     this.socketService.on<Order>(SOCKET_EVENTS.ORDER_STATUS_CHANGED, (updatedOrder: Order) => {
       this.orders = this.orders.map(order => order._id === updatedOrder._id ? updatedOrder : order)
+      console.log('evento recibido', updatedOrder)
     })
   }
 
@@ -41,12 +43,6 @@ export class KitchenComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOrders()
-
-    this.socketService.connected$.subscribe(connected => {
-      if (!connected || this.listenersInitialized) return
-
-      this.initSocketListeners()
-      this.listenersInitialized = true
-    })
+    this.initSocketListeners()
   }
 }

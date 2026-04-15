@@ -67,6 +67,8 @@ io.on('connection', async (socket) => {
   const { nombre, role } = socket.user
   console.log(`User connected: ${nombre} with role: ${role}`)
 
+  console.log('socket rooms', socket.rooms)
+
   socket.join(role)
   console.log(`Socket ${socket.id} united to room ${role}`)
 
@@ -87,6 +89,9 @@ io.on('connection', async (socket) => {
       if (rooms.includes('all')) {
         io.emit(event, order)
       } else {
+        console.log('EMITIENDO EVENTO')
+        console.log('DATA:', status)
+        console.log('emitiendo a rooms:', rooms)
         rooms.forEach(room => {
           io.to(room).emit(event, order)
         })

@@ -17,7 +17,7 @@ export class SocketService {
     })
 
     this.socket.on('connect', () => {
-      console.log('Socket connected')
+      console.log('Socket connected', this.socket.id)
       this.connectedSubject.next(true)
     })
 
