@@ -16,6 +16,8 @@ export class SocketService {
       auth: { token }
     })
 
+    console.log('socket instance created', this.socket)
+
     this.socket.on('connect', () => {
       console.log('Socket connected', this.socket.id)
       this.connectedSubject.next(true)
@@ -29,6 +31,7 @@ export class SocketService {
 
   on<T>(event: string, callback: (data: T) => void) {
     if (!this.socket) return
+    console.log('registro evento', event, this.socket)
     this.socket.on(event, callback)
   }
 

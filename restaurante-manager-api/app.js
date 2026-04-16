@@ -93,7 +93,7 @@ io.on('connection', async (socket) => {
         console.log('DATA:', status)
         console.log('emitiendo a rooms:', rooms)
         rooms.forEach(room => {
-          io.to(room).emit(event, order)
+          io.emit('order:status:changed', order)
         })
       }
     }
