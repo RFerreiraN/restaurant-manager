@@ -1,12 +1,12 @@
-export interface STATUS_LABELS {
+export const STATUS_LABELS = {
   preparing: 'Preparar',
-  ready: 'Lsto',
+  ready: 'Listo',
   delivered: 'Entregado',
   cancelled: 'Cancelado',
   paid: 'Pagado',
 }
 
-export interface NEXT_STATUS {
+export const NEXT_STATUS = {
   pending: 'preparing',
   preparing: 'ready',
   ready: 'delivered',

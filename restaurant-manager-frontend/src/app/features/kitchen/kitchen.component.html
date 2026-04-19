@@ -22,11 +22,11 @@
       </div>
     </div>
 
-    <div class="flex justify-around gap-2 mt-2">
+    <div class="flex justify-around gap-2 mt-2" *ngIf="getNextStatus(order.status)">
       <button
         class="bg-emerald-700 hover:bg-emerald-600 text-white  py-1 px-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
-        (click)="changeStatus(order._id, 'preparing')">
-        {{order.status}}
+        (click)="changeStatus(order._id, getNextStatus(order.status))">
+        {{getActionLabel(order.status)}}
       </button>
       <!-- 
       <button

@@ -12,8 +12,6 @@ import { STATUS_LABELS, NEXT_STATUS } from 'src/app/core/constants/status_order'
 export class KitchenComponent implements OnInit, OnDestroy {
   orders: Order[] = []
 
-  next_status?: NEXT_STATUS[]
-
   async loadOrders() {
     const res = await fetch('http://localhost:3000/orders')
     this.orders = await res.json()
@@ -45,6 +43,14 @@ export class KitchenComponent implements OnInit, OnDestroy {
     this.socketService.on<Order>(SOCKET_EVENTS.ORDER_STATUS_CHANGED, this.statusHandler)
   }
 
+  getNextStatus(status: string) {
+    return NEXT_STATUS[status]
+  }
+
+  getActionLabel(status: string) {
+    const next = this.getNextStatus(status)
+    return STATUS_LABELS[next]
+  }
 
   constructor(private socketService: SocketService) { }
 
