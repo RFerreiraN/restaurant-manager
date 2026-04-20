@@ -2,15 +2,19 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SocketService } from 'src/app/core/services/socket.service';
 import { Order } from 'src/app/core/models/order.model';
 import { SOCKET_EVENTS } from 'src/app/core/constants/socket.event';
-import { STATUS_LABELS, NEXT_STATUS } from 'src/app/core/constants/status_order';
+import { getNextStatus, getActionLabel } from 'src/app/core/constants/status_order'
+import { OrderStatus } from 'src/app/core/types/order.status';
+import { Role } from 'src/app/core/types/role.order';
 
 @Component({
   selector: 'app-kitchen',
   templateUrl: './kitchen.component.html',
   styleUrls: ['./kitchen.component.css']
 })
+
 export class KitchenComponent implements OnInit, OnDestroy {
   orders: Order[] = []
+  role: Role = 'kitchen'
 
   async loadOrders() {
     const res = await fetch('http://localhost:3000/orders')
@@ -18,10 +22,11 @@ export class KitchenComponent implements OnInit, OnDestroy {
     console.log(this.orders)
   }
 
-  changeStatus(orderId: string, status: string) {
+  changeStatus(orderId: string, status: OrderStatus | null) {
     console.log('Prueba', orderId, status)
     console.log(this.socketService)
     console.log('socket connected?', this.socketService['socket']?.connected)
+    if (!status) return
     this.socketService.emit('order:changeStatus', {
       orderId,
       status
@@ -43,13 +48,12 @@ export class KitchenComponent implements OnInit, OnDestroy {
     this.socketService.on<Order>(SOCKET_EVENTS.ORDER_STATUS_CHANGED, this.statusHandler)
   }
 
-  getNextStatus(status: string) {
-    return NEXT_STATUS[status]
+  getActionLabel(role: Role, status: OrderStatus) {
+    return getActionLabel(role, status)
   }
 
-  getActionLabel(status: string) {
-    const next = this.getNextStatus(status)
-    return STATUS_LABELS[next]
+  getNextStatus(role: Role, status: OrderStatus) {
+    return getNextStatus(role, status)
   }
 
   constructor(private socketService: SocketService) { }
@@ -63,5 +67,4 @@ export class KitchenComponent implements OnInit, OnDestroy {
     this.socketService.off(SOCKET_EVENTS.ORDER_NEW, this.newOrderHandler)
     this.socketService.off(SOCKET_EVENTS.ORDER_STATUS_CHANGED, this.statusHandler)
   }
-
 }

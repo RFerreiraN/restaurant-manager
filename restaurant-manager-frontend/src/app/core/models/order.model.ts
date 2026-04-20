@@ -20,7 +20,7 @@ export interface Order {
   _id: string
   user: string
   items: OrderItem[]
-  status: 'pending' | 'preparing' | 'ready' | 'served'
+  status: 'pending' | 'preparing' | 'ready' | 'delivered'
   table: Table
   total: number
   observations?: string
