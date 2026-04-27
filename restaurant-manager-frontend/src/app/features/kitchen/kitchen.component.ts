@@ -5,6 +5,7 @@ import { SOCKET_EVENTS } from 'src/app/core/constants/socket.event';
 import { getNextStatus, getActionLabel } from 'src/app/core/constants/status_order'
 import { OrderStatus } from 'src/app/core/types/order.status';
 import { Role } from 'src/app/core/types/role.order';
+import { KITCHEN_VISIBLE_STATUSES } from 'src/app/core/utils/kitchen.status';
 
 @Component({
   selector: 'app-kitchen',
@@ -56,11 +57,18 @@ export class KitchenComponent implements OnInit, OnDestroy {
     return getNextStatus(role, status)
   }
 
+  visibleOrders(): Order[] {
+    return this.orders.filter(order =>
+      KITCHEN_VISIBLE_STATUSES.includes(order.status)
+    )
+  }
+
   constructor(private socketService: SocketService) { }
 
   ngOnInit(): void {
     this.loadOrders()
     this.initSocketListeners()
+    this.visibleOrders()
   }
 
   ngOnDestroy(): void {

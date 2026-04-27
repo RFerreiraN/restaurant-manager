@@ -40,9 +40,10 @@
 <div
   class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 min-h-screen w-full bg-amber-700 text-white items-start">
 
-  <div *ngFor="let order of orders"
+  <div *ngFor="let order of visibleOrders()"
     class="bg-white text-black shadow-md rounded-xl p-4 border-l-4 border-zinc-300 h-fit">
 
+    <p class="font-bold text-sm border-b mb-2 pb-1">{{order.createdAt | date:'dd/MM/yyyy HH:mm'}}</p>
 
     <p class="font-bold text-sm border-b mb-2 pb-1">
       Orden: {{ order._id }}

@@ -3,14 +3,14 @@ import { Role } from '../types/role.order';
 
 export const STATUS_LABELS: Record<OrderStatus, string> = {
   pending: 'Pendiente',
-  preparing: 'Preparar',
+  preparing: 'Preparando',
   ready: 'Listo',
   delivered: 'Entregado',
   paid: 'Pagado',
   cancelled: 'Cancelado'
 }
 
-export const NEXT_STATUS_BY_ROLE: Record<string, Partial<Record<OrderStatus, OrderStatus | null>>> = {
+export const NEXT_STATUS_BY_ROLE: Record<Role, Partial<Record<OrderStatus, OrderStatus | null>>> = {
   kitchen: {
     pending: 'preparing',
     preparing: 'ready',
@@ -21,7 +21,14 @@ export const NEXT_STATUS_BY_ROLE: Record<string, Partial<Record<OrderStatus, Ord
     delivered: 'paid',
     paid: null
   },
-  admin: {}
+  admin: {
+    pending: 'preparing',
+    preparing: 'ready',
+    ready: 'delivered',
+    delivered: 'paid',
+    paid: null,
+    cancelled: null
+  }
 }
 
 export function getNextStatus(role: Role, status: OrderStatus): OrderStatus | null {
