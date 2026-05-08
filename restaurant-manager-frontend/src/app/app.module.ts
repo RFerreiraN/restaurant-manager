@@ -5,12 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { KitchenComponent } from './features/kitchen/kitchen.component';
 import { WaiterComponent } from './features/waiter/waiter.component';
+import { WaiterSidebarComponent } from './features/waiter-sidebar/waiter-sidebar.component';
+import { NavbarComponent } from './features/navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     KitchenComponent,
-    WaiterComponent
+    WaiterComponent,
+    WaiterSidebarComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
