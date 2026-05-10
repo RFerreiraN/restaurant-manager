@@ -14,7 +14,8 @@
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-20 gap-x-10 justify-items-center">
-      <div *ngFor="let mesa of [].constructor(8); let i = index" class="relative w-32 h-32 group cursor-pointer">
+      <div *ngFor="let mesa of [].constructor(8); let i = index" [routerLink]="['/sala/mesas']"
+        class="relative w-32 h-32 group cursor-pointer">
         <div
           class="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-4 bg-zinc-800 rounded-t-lg group-hover:bg-amber-500 transition-all shadow-sm">
         </div>

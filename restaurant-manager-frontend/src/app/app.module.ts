@@ -5,20 +5,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { KitchenComponent } from './features/kitchen/kitchen.component';
 import { WaiterComponent } from './features/waiter/waiter.component';
-import { WaiterSidebarComponent } from './features/waiter-sidebar/waiter-sidebar.component';
 import { NavbarComponent } from './features/navbar/navbar.component';
-import { WaiterBillComponent } from './features/waiter-bill/waiter-bill.component';
 import { TablesComponent } from './features/tables/tables.component';
+import { WaiterOptionsComponent } from './features/waiter-options/waiter-options.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     KitchenComponent,
     WaiterComponent,
-    WaiterSidebarComponent,
     NavbarComponent,
-    WaiterBillComponent,
-    TablesComponent
+    TablesComponent,
+    WaiterOptionsComponent
   ],
   imports: [
     BrowserModule,
