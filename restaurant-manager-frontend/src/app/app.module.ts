@@ -7,6 +7,8 @@ import { KitchenComponent } from './features/kitchen/kitchen.component';
 import { WaiterComponent } from './features/waiter/waiter.component';
 import { WaiterSidebarComponent } from './features/waiter-sidebar/waiter-sidebar.component';
 import { NavbarComponent } from './features/navbar/navbar.component';
+import { WaiterBillComponent } from './features/waiter-bill/waiter-bill.component';
+import { TablesComponent } from './features/tables/tables.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { NavbarComponent } from './features/navbar/navbar.component';
     KitchenComponent,
     WaiterComponent,
     WaiterSidebarComponent,
-    NavbarComponent
+    NavbarComponent,
+    WaiterBillComponent,
+    TablesComponent
   ],
   imports: [
     BrowserModule,

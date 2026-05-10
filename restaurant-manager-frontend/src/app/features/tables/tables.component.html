@@ -1,0 +1,41 @@
+<div class="h-full w-full flex flex-col items-center justify-center bg-amber-700 p-6">
+
+  <div class="w-full max-w-5xl">
+
+    <div
+      class="w-full h-28 bg-zinc-900 border-b-4 border-zinc-800 rounded-t-[40px] mb-24 flex items-center justify-center relative shadow-2xl">
+      <div class="text-center">
+        <span class="text-zinc-500 font-black tracking-[0.6em] uppercase text-xs">Barra de Servicio</span>
+      </div>
+      <div class="absolute -bottom-5 left-0 w-full flex justify-around px-12">
+        <div *ngFor="let s of [1,2,3,4,5,6]"
+          class="w-10 h-10 bg-zinc-800 rounded-full border-4 border-zinc-700 shadow-md"></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-20 gap-x-10 justify-items-center">
+      <div *ngFor="let mesa of [].constructor(8); let i = index" class="relative w-32 h-32 group cursor-pointer">
+        <div
+          class="absolute -top-2 left-1/2 -translate-x-1/2 w-10 h-4 bg-zinc-800 rounded-t-lg group-hover:bg-amber-500 transition-all shadow-sm">
+        </div>
+        <div
+          class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-10 h-4 bg-zinc-800 rounded-b-lg group-hover:bg-amber-500 transition-all shadow-sm">
+        </div>
+        <div
+          class="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-10 bg-zinc-800 rounded-l-lg group-hover:bg-amber-500 transition-all shadow-sm">
+        </div>
+        <div
+          class="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-10 bg-zinc-800 rounded-r-lg group-hover:bg-amber-500 transition-all shadow-sm">
+        </div>
+
+        <div
+          class="absolute inset-2 bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center border-b-4 border-zinc-200 group-hover:border-amber-500 transition-all">
+          <span class="text-zinc-400 text-[10px] font-bold uppercase tracking-tighter">Mesa</span>
+          <span class="text-zinc-900 font-black text-2xl">{{ i + 1 }}</span>
+          <div class="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
